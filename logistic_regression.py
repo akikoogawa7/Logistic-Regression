@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -36,12 +37,22 @@ class LogisticRegression:
             self.w -= lr * grad_w
             self.b -= lr * grad_b
             all_losses.append(loss)
+        print('loss:', all_losses)
+        plot_loss(all_losses)
 
     def predict(self, X):
         return np.matmul(X, self.w) + self.b
 
-    def __compute_bce_loss__(self, y_hat, y):
+    def _compute_bce_loss(self, y_hat, y):
         pass
 
-    def __compute_gradient__(self):
+    def _compute_gradient(self):
         pass
+
+def plot_loss(losses):
+    plt.figure()
+    plt.ylabel('Cost')
+    plt.xlabel('Epoch')
+    plt.plot(losses)
+    plt.show()
+
