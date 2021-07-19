@@ -32,8 +32,8 @@ class LogisticRegression:
         all_losses = []
         for epoch in range(epochs):
             y_hat = self.predict(X)
-            loss = self.__compute_bce_loss__(y_hat, y)
-            grad_w, grad_b = self.__compute_gradient__(X, y)
+            loss = self._compute_bce_loss(y_hat, y)
+            grad_w, grad_b = self._compute_gradient(X, y)
             self.w -= lr * grad_w
             self.b -= lr * grad_b
             all_losses.append(loss)
