@@ -19,3 +19,19 @@ column_names = load_breast_cancer()['feature_names']
 df.columns = column_names
 
 print(df)
+
+class LogisticRegression:
+    def __init__(self):
+        pass
+
+    def fit(self, X, y):
+        pass
+
+    def predict(self):
+        pass
+
+    def __get_bce__(self):
+        pass
+
+    def __compute_gradient__(self):
+        pass
