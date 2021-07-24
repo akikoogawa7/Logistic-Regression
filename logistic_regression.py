@@ -39,12 +39,32 @@ class LogisticRegression:
             all_losses.append(loss)
         print('loss:', all_losses)
         plot_loss(all_losses)
+    
+    def _negative_sigmoid(self, z):
+        self.exp = np.exp(z)
+        return self.exp / (self.exp + 1)
+
+    def _positive_sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+
+    def sigmoid(self, z):
+        positive = z >= 0
+        # Boolean array inversion is faster than another comparison
+        negative = ~positive
+
+        # empty contains junk hence will be faster to allocate than zeros
+        result = np.empty_like(z)
+        result[positive] = self._positive_sigmoid(z[positive])
+        result[negative] = self._negative_sigmoid(z[negative])
+        return result
 
     def predict(self, X):
-        return np.matmul(X, self.w) + self.b
+        return self._sigmoid(self.predict(X))
 
-    def _compute_bce_loss(self, y_hat, y):
-        pass
+    def _bce(self, y_hat, y):
+        y_hat = self.predict(X)
+        loss = -(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
+        return np.mean(loss)
 
     def _compute_gradient(self):
         pass
