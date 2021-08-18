@@ -6,6 +6,7 @@ from sklearn.datasets import load_breast_cancer
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -47,7 +48,7 @@ class LogisticRegression:
     def _positive_sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
 
-    def sigmoid(self, z):
+    def _sigmoid(self, z):
         positive = z >= 0
         # Boolean array inversion is faster than another comparison
         negative = ~positive
@@ -66,8 +67,21 @@ class LogisticRegression:
         loss = -(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
         return np.mean(loss)
 
-    def _compute_gradient(self):
-        pass
+    def _compute_gradient(self, X, y):
+        y_hat = self.predict(X)
+        z = self._predict_linear_(X)  # Old y_hat i.e old prediction = Xw+b
+
+        dl_dy_hat = self._dl_dy_hat_(y, y_hat)
+        dy_hat_dz = self._dy_hat_dz_(z)
+        dz_dw = X
+        dz_db = 1
+
+        gradient_w = np.matmul(dl_dy_hat, dy_hat_dz) * dz_dw
+        gradient_w = np.mean(gradient_w)
+        gradient_b = np.matmul(dl_dy_hat, dy_hat_dz) * dz_db
+
+        return gradient_w, gradient_b
+
 
 def plot_loss(losses):
     plt.figure()
@@ -76,3 +90,7 @@ def plot_loss(losses):
     plt.plot(losses)
     plt.show()
 
+# %%
+model = LogisticRegression(30)
+model.fit(X, y)
+score = model.score(X, y)
